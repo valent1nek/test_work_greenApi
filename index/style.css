@@ -1,0 +1,15 @@
+
+.input{
+    margin-top: 20px;
+    display: flex;
+    color: red;
+    text-align: center;
+    flex-direction: column;
+    width: 100px;
+    gap: 20px;
+}
+
+.response_area{
+    width: 500px;
+    height: 200px;
+}
