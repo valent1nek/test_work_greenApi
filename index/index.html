@@ -21,9 +21,9 @@
 </label>
 <hr>
 <label class="input">
-    <input placeholder="number">
-    <textarea placeholder="TEXT"></textarea>
-    <button>sendFileByUrl</button>
+    <input placeholder="number" id="filePhoneInput">
+    <textarea placeholder="TEXT" id="urlInput"></textarea>
+    <button onclick="sendFileByUrl()">sendFileByUrl</button>
 </label>
 <h1>RESPONSE</h1>
 <label>
@@ -39,6 +39,9 @@
 
     const messageInput = document.getElementById("messageInput");
     const phoneNumberInput = document.getElementById("phoneNumberInput");
+
+    const filePhoneInput = document.getElementById("filePhoneInput");
+    const urlInput = document.getElementById("urlInput");
 
     const getUrl = (nameMethod) => {
         // const idInstance = id.value;
@@ -75,6 +78,7 @@
     }
 
     const sendMessage = async () => {
+        responseArea.value = "";
         const phone = phoneNumberInput.value;
         const message = messageInput.value;
 
@@ -84,6 +88,37 @@
         }
 
         const nameMethod = "sendMessage"
+
+        const url = getUrl(nameMethod)
+
+        const response = await fetch(url,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        const data = await response.json();
+
+        responseArea.value = JSON.stringify(data, null, 2);
+    }
+
+    const sendFileByUrl = async () => {
+        responseArea.value = "";
+        const phone = filePhoneInput.value;
+        const urlFile = urlInput.value;
+
+        const fileName = urlFile.split("/").pop();
+        const name = fileName.split(".").pop();
+
+        const body = {
+            chatId: `${phone}@c.us`,
+            urlFile: urlFile,
+            fileName: name
+        }
+
+        const nameMethod = "sendFileByUrl"
 
         const url = getUrl(nameMethod)
 
