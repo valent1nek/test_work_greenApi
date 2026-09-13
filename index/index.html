@@ -7,8 +7,8 @@
 </head>
 <body>
 <label class="input">
-    <input placeholder="idInstance">
-    <input placeholder="APITokenInstance">
+    <input placeholder="idInstance" type="number" id="inputIdInst">
+    <input placeholder="APITokenInstance" id="inputApiInst">
 </label>
 <hr>
 <button class="input" id="btnGetSettings" onclick="getSettings()">getSettings</button>
@@ -33,11 +33,35 @@
 </html>
 
 <script>
-    let url = "https://7201.api.green-api.com/waInstance720122735141/getSettings/02f930081d334a2ea524f6d094c49c08d00c7d4bee9b41f1b7";
-
+    const id = document.getElementById("inputIdInst")
+    const apiToken = document.getElementById("inputApiInst")
     const responseArea = document.getElementById("responseArea")
 
+    const getUrl = (nameMethod) => {
+        const idInstance = id.value;
+        const apiTokenInstance = apiToken.value;
+        return `https://7201.api.green-api.com/waInstance${idInstance}/${nameMethod}/${apiTokenInstance}`
+    }
+
+
     const getSettings = async () => {
+        responseArea.value = "";
+        const nameMethod = "getSettings"
+
+        const url = getUrl(nameMethod)
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        responseArea.value = JSON.stringify(data, null, 2);
+    }
+
+    const getStateInstance = async () => {
+        responseArea.value = "";
+        const nameMethod = "getStateInstance"
+
+        const url = getUrl(nameMethod)
+
         const response = await fetch(url);
         const data = await response.json();
 
