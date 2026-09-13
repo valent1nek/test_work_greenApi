@@ -15,9 +15,9 @@
 <button class="input" onclick="getStateInstance()">getStateInstance</button>
 <hr>
 <label class="input">
-    <input placeholder="number">
-    <textarea placeholder="TEXT"></textarea>
-    <button class>sendMessage</button>
+    <input placeholder="number" type="number" id="phoneNumberInput">
+    <textarea placeholder="TEXT" id="messageInput"></textarea>
+    <button class onclick="sendMessage()">sendMessage</button>
 </label>
 <hr>
 <label class="input">
@@ -36,6 +36,9 @@
     const id = document.getElementById("inputIdInst")
     const apiToken = document.getElementById("inputApiInst")
     const responseArea = document.getElementById("responseArea")
+
+    const messageInput = document.getElementById("messageInput");
+    const phoneNumberInput = document.getElementById("phoneNumberInput");
 
     const getUrl = (nameMethod) => {
         // const idInstance = id.value;
@@ -66,6 +69,32 @@
         const url = getUrl(nameMethod)
 
         const response = await fetch(url);
+        const data = await response.json();
+
+        responseArea.value = JSON.stringify(data, null, 2);
+    }
+
+    const sendMessage = async () => {
+        const phone = phoneNumberInput.value;
+        const message = messageInput.value;
+
+        const body = {
+            chatId: `${phone}@c.us`,
+            message: `${message}`,
+        }
+
+        const nameMethod = "sendMessage"
+
+        const url = getUrl(nameMethod)
+
+        const response = await fetch(url,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
         const data = await response.json();
 
         responseArea.value = JSON.stringify(data, null, 2);
